@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Protocol
 
-from y5n.runtime.store.event.ports import OnGet, OnReplace
+from y5n.runtime.store.event.ports import OnDelete, OnGet, OnReplace
 
 from ..data import RunData
 from ..models import Run
@@ -15,11 +15,12 @@ class OnScan(Protocol):
 
 
 class RunService:
-    """Immutable historical runs.
+    """Completed runs.
 
-    A run is written once, when the interactive run is finished, and is
-    never edited or deleted. The service deliberately offers no update or
-    delete path.
+    A run is written once, when the interactive run is finished, and its
+    entries are never edited afterwards. A run can be removed as a whole
+    (cleanup, discarded test runs); the service deliberately offers no
+    update path.
     """
 
     def __init__(
@@ -27,11 +28,13 @@ class RunService:
         on_get: OnGet,
         on_replace: OnReplace,
         on_scan: OnScan,
+        on_delete: OnDelete,
         on_next_id,
     ):
         self._on_get = on_get
         self._on_replace = on_replace
         self._on_scan = on_scan
+        self._on_delete = on_delete
         self._on_next_id = on_next_id
 
     async def add_run(self, *, topic_id: str, entries: dict[str, list[str]]) -> Run:
@@ -62,6 +65,12 @@ class RunService:
             created=data.created,
             entries=data.entries,
         )
+
+    async def delete_run(self, run_id: str) -> None:
+        run = await self.get_run(run_id)
+        if run is None:
+            raise ValueError(f"Run '{run_id}' not found.")
+        await self._on_delete(key=run_key(run_id))
 
     async def _all_runs(self) -> list[Run]:
         rows = await self._on_scan(namespace=run_namespace())

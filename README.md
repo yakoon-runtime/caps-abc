@@ -28,7 +28,8 @@ use AI during an active run.
   category, case-insensitively.
 - `Run` — one completed ABC run of a topic: an immutable historical
   snapshot with a timestamp and the entries collected during the run,
-  assigned to the letters A–Z.
+  assigned to the letters A–Z. Entries are never edited; a run can be
+  removed as a whole.
 
 Only empty containers may be deleted. A category containing topics or a
 topic containing runs cannot be deleted.
@@ -56,6 +57,7 @@ ABC is mounted at `/opt/abc`.
             new
             list
             show
+            delete
 
 `find` performs a case-insensitive substring search over names.
 
@@ -100,15 +102,19 @@ Entries under the same key that differ only in case are stored once
 (comparison ignores case); the spelling of the first entry is kept.
 
 **Ctrl+N finishes the run.** Finishing stores one immutable run
-snapshot for the topic; an empty run is discarded. Esc pauses the run
+snapshot for the topic; an empty run is discarded. With `--test` the
+run behaves exactly like a normal run, but finishing stores nothing —
+knowledge can be tested without creating a real run. Esc pauses the run
 (within the session) and Ctrl+X cancels it without storing anything.
 
 During a run, no previous answers, suggestions, search, autocomplete,
 AI assistance, evaluation, or scores are present. Completed runs are
-historical snapshots and are not edited.
+historical snapshots and are not edited; `run delete` removes a run as
+a whole (for example a discarded test run or an accidental save).
 
 `run list` shows the runs of a topic with their timestamps and entry
-counts; `run show` displays one run grouped by key.
+counts; `run show` displays one run grouped by key; `run delete` removes
+one run.
 
 ## Development
 

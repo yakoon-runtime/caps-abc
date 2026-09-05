@@ -36,6 +36,7 @@ async def main():
         on_get=db.get,
         on_replace=_replace,
         on_scan=_scan,
+        on_delete=db.delete,
         on_next_id=db.next_id,
     )
     topics = TopicService(

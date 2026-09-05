@@ -159,9 +159,38 @@ async def test_list_runs_only_requested_topic(categories, topics, runs):
 
 
 @pytest.mark.asyncio
-async def test_completed_run_has_no_edit_path(runs):
+async def test_completed_run_has_no_update_path(runs):
     assert not hasattr(runs, "update_run")
-    assert not hasattr(runs, "delete_run")
+
+
+@pytest.mark.asyncio
+async def test_run_delete_removes_whole_run(categories, topics, runs):
+    c = await categories.add_category(name="Geschichte")
+    t = await topics.add_topic(category_id=c.id, name="Römisches Reich")
+    run = await runs.add_run(topic_id=t.id, entries={"A": ["Augustus"]})
+
+    await runs.delete_run(run_id=run.id)
+
+    assert await runs.get_run(run_id=run.id) is None
+    assert await runs.list_runs(topic_id=t.id) == []
+
+
+@pytest.mark.asyncio
+async def test_run_delete_missing_rejected(runs):
+    with pytest.raises(ValueError):
+        await runs.delete_run(run_id="999")
+
+
+@pytest.mark.asyncio
+async def test_topic_deletable_after_runs_deleted(categories, topics, runs):
+    c = await categories.add_category(name="Geschichte")
+    t = await topics.add_topic(category_id=c.id, name="Römisches Reich")
+    run = await runs.add_run(topic_id=t.id, entries={"A": ["Augustus"]})
+
+    await runs.delete_run(run_id=run.id)
+    await topics.delete_topic(topic_id=t.id)
+
+    assert await topics.get_topic(topic_id=t.id) is None
 
 
 @pytest.mark.asyncio
@@ -220,14 +249,26 @@ def _view_text(view: dict) -> str:
     return json.dumps(view, ensure_ascii=False)
 
 
-def _set_run_context(topic_name: str) -> None:
+def _set_run_context(topic_name: str, *extra_args: str) -> None:
     set_context(
         {
             "node": {"path": "/opt/abc/run/new", "name": "new"},
             "user": {},
             "session": {},
             "flow": {},
-            "args": [topic_name],
+            "args": [topic_name, *extra_args],
+        }
+    )
+
+
+def _set_run_delete_context(topic_name: str, run_id: str) -> None:
+    set_context(
+        {
+            "node": {"path": "/opt/abc/run/delete", "name": "delete"},
+            "user": {},
+            "session": {},
+            "flow": {},
+            "args": [topic_name, run_id],
         }
     )
 
@@ -236,6 +277,12 @@ def _new_run():
     from y5n.caps.abc.apps.run import new as run_new
 
     return run_new.main()
+
+
+def _delete_run():
+    from y5n.caps.abc.apps.run import delete as run_delete
+
+    return run_delete.main()
 
 
 async def _make_topic(categories, topics, name="Roman Empire"):
@@ -436,3 +483,102 @@ async def test_run_interaction_shows_no_previous_runs(categories, topics, runs):
 
     stored = await runs.list_runs(topic_id=t.id)
     assert len(stored) == 2
+
+
+# ----------------------------------------
+# run delete (app level, driven like the shell)
+# ----------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_run_delete_interaction_removes_run(categories, topics, runs):
+    t = await _make_topic(categories, topics)
+    run = await runs.add_run(topic_id=t.id, entries={"A": ["Augustus"]})
+    _set_run_delete_context("Roman Empire", run.id)
+
+    pulses = _drive(_delete_run(), [])
+
+    assert f"Run #{run.id} deleted" in _view_text(_all_views(pulses)[-1])
+    assert await runs.get_run(run_id=run.id) is None
+    assert await runs.list_runs(topic_id=t.id) == []
+
+
+@pytest.mark.asyncio
+async def test_run_delete_interaction_run_of_other_topic_rejected(
+    categories, topics, runs
+):
+    c1 = await categories.add_category(name="Geschichte")
+    c2 = await categories.add_category(name="Führung")
+    t1 = await topics.add_topic(category_id=c1.id, name="Römisches Reich")
+    t2 = await topics.add_topic(category_id=c2.id, name="Change")
+    run = await runs.add_run(topic_id=t2.id, entries={"B": ["Buy-in"]})
+    _set_run_delete_context("Römisches Reich", run.id)
+
+    pulses = _drive(_delete_run(), [])
+
+    assert f"Run not found for 'Römisches Reich': {run.id}" in _view_text(
+        _all_views(pulses)[-1]
+    )
+    assert await runs.get_run(run_id=run.id) is not None
+
+
+@pytest.mark.asyncio
+async def test_run_delete_interaction_missing_run_rejected(categories, topics, runs):
+    await _make_topic(categories, topics)
+    _set_run_delete_context("Roman Empire", "99")
+
+    pulses = _drive(_delete_run(), [])
+
+    assert "Run not found for 'Roman Empire': 99" in _view_text(_all_views(pulses)[-1])
+
+
+# ----------------------------------------
+# run new --test (app level, driven like the shell)
+# ----------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_run_interaction_test_mode_marks_view_and_stores_nothing(
+    categories, topics, runs
+):
+    t = await _make_topic(categories, topics)
+    _set_run_context("Roman Empire", "--test")
+
+    pulses = _drive(
+        _new_run(),
+        ["Afrika", "Army; Kaiser", FormAction("submit")],
+    )
+
+    views = _persist_views(pulses)
+    first = _view_text(views[0])
+    assert "Test run — nothing will be stored." in first
+    last = _view_text(views[-1])
+    assert "Afrika" in last and "Kaiser" in last
+
+    summary = _view_text(_all_views(pulses)[-1])
+    assert "Test run finished — 3 entries in 2 keys — nothing stored." in summary
+
+    assert await runs.list_runs(topic_id=t.id) == []
+
+
+@pytest.mark.asyncio
+async def test_run_interaction_test_mode_empty_run_discarded(categories, topics, runs):
+    t = await _make_topic(categories, topics)
+    _set_run_context("Roman Empire", "--test")
+
+    pulses = _drive(_new_run(), [FormAction("submit")])
+
+    assert "Run discarded — no entries." in _view_text(_all_views(pulses)[-1])
+    assert await runs.list_runs(topic_id=t.id) == []
+
+
+@pytest.mark.asyncio
+async def test_run_interaction_without_test_flag_still_saves(categories, topics, runs):
+    t = await _make_topic(categories, topics)
+    _set_run_context("Roman Empire")
+
+    _drive(_new_run(), ["Afrika", FormAction("submit")])
+
+    stored = await runs.list_runs(topic_id=t.id)
+    assert len(stored) == 1
+    assert stored[0].entries == {"A": ["Afrika"]}

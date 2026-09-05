@@ -1,18 +1,20 @@
-title: New Run
+title: Delete Run
 host: /boot/python/runtime
 resolvable: true
 navigable: false
 contextual: false
 entry:
-  run: cap:y5n.caps.abc.apps.run.new:main
+  run: cap:y5n.caps.abc.apps.run.delete:main
 invocation:
   params:
   - key: topic
     required: true
     positional: true
-  - key: test
+  - key: run
+    required: true
+    positional: true
 resources:
   ref: resource:y5n.caps.abc.resources.loader:content
   man:
     default:
-      path: run/new/man.ydf
+      path: run/delete/man.ydf

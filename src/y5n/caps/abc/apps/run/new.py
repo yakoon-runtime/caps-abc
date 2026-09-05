@@ -16,7 +16,9 @@ from .topics import resolve_topic
 
 
 async def main():
-    topic_ref = context.request().arg(0)
+    request = context.request()
+    topic_ref = request.arg(0)
+    test_mode = request.has_option("test")
 
     topics = ports.get("abc.topic.service")
     runs = ports.get("abc.run.service")
@@ -28,7 +30,7 @@ async def main():
     entries: dict[str, list[str]] = {}
     rejected: list[str] = []
     while True:
-        event = await io.prompt(_run_view(topic, entries, rejected))
+        event = await io.prompt(_run_view(topic, entries, rejected, test_mode))
         payload = event.payload
         if isinstance(payload, FormAction):
             if payload.action == "submit":
@@ -48,11 +50,19 @@ async def main():
     if count == 0:
         await io.write("Run discarded — no entries.")
         return
+    if test_mode:
+        await io.write(
+            f"Test run finished — {count} entries in {len(entries)} keys"
+            " — nothing stored."
+        )
+        return
     run = await runs.add_run(topic_id=topic.id, entries=entries)
     await io.write(f"Run #{run.id} saved — {count} entries in {len(entries)} keys.")
 
 
-def _run_view(topic, entries: dict[str, list[str]], rejected: list[str]) -> dict:
+def _run_view(
+    topic, entries: dict[str, list[str]], rejected: list[str], test_mode: bool = False
+) -> dict:
     cue: list = []
     for i, key in enumerate(KEYS):
         if i % 5 == 0 and i > 0:
@@ -103,6 +113,19 @@ def _run_view(topic, entries: dict[str, list[str]], rejected: list[str]) -> dict
             ]
         )
     )
+    if test_mode:
+        blocks.append(Text())
+        blocks.append(
+            Text(
+                text=[
+                    InlineEm(
+                        children=[
+                            InlineText(text="Test run — nothing will be stored.")
+                        ]
+                    )
+                ]
+            )
+        )
     return Document(
         header=Header(role="info", title=topic.name), blocks=blocks
     ).to_dict()

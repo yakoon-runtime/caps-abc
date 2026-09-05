@@ -7,7 +7,7 @@ Usage
 </heading>
 
 <pre>
-  new TOPIC
+  new TOPIC [--test]
 </pre>
 
 <heading level="2">
@@ -31,15 +31,18 @@ stored; the run view names them.
 </paragraph>
 
 <pre>
-  Augustus                -&gt; A
-  1945                    -&gt; 1
-  4: 1945                 -&gt; 4
-  a: plenty of distance   -&gt; A
+  Augustus                -> A
+  1945                    -> 1
+  4: 1945                 -> 4
+  a: plenty of distance   -> A
 </pre>
 
 <paragraph>
 Press Ctrl+N to finish the run. Finishing stores one immutable run
-snapshot; an empty run is discarded. Entries under the same key
+snapshot; an empty run is discarded. With --test the run behaves
+exactly like a normal run, but finishing stores nothing — the
+collected entries are only reported, so knowledge can be tested
+without creating a real run. Entries under the same key
 that differ only in case are stored once; the spelling of the
 first entry is kept. The submitted input is cleared after each
 Enter and appears only in the accumulated entries. During the run
@@ -55,6 +58,9 @@ Examples
 <pre>
 new "Roman Empire"
   Start an ABC run for the topic Roman Empire.
+
+new "Roman Empire" --test
+  Test the knowledge without storing a run.
 </pre>
 
 <heading level="2">
@@ -62,5 +68,5 @@ See also
 </heading>
 
 <paragraph>
-list, show
+list, show, delete
 </paragraph>

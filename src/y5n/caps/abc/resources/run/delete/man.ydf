@@ -1,0 +1,41 @@
+<heading>delete - Delete a run of a topic.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  delete TOPIC RUN
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Deletes one completed run as a whole. TOPIC may be an id or a
+topic name; RUN is the numeric run id as shown by list. The run
+must belong to the given topic, so a run is never removed from
+the wrong place. Entries inside a run are never edited — deletion
+is the only way to remove a stored run, for example a discarded
+test run or an accidental save.
+</paragraph>
+
+<heading level="2">
+Examples
+</heading>
+
+<pre>
+delete "Roman Empire" 3
+  Delete run 3 of the topic Roman Empire.
+</pre>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+list, show, new
+</paragraph>
