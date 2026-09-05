@@ -1,0 +1,11 @@
+title: ABC
+host: /boot/python/runtime
+resolvable: false
+navigable: true
+contextual: false
+
+stores:
+  - abc
+
+entry:
+  setup: cap:y5n.caps.abc.setup:main

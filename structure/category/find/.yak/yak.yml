@@ -1,0 +1,17 @@
+title: Find Category
+host: /boot/python/runtime
+resolvable: true
+navigable: false
+contextual: false
+entry:
+  run: cap:y5n.caps.abc.apps.category.find:main
+invocation:
+  params:
+  - key: text
+    required: true
+    positional: true
+resources:
+  ref: resource:y5n.caps.abc.resources.loader:content
+  man:
+    default:
+      path: category/find/man.ydf

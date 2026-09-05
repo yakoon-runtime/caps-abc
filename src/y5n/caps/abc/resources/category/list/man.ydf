@@ -1,0 +1,28 @@
+<heading>list - List all categories.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  list
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Lists all categories of the ABC library with their ids, sorted
+alphabetically.
+</paragraph>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+find, add
+</paragraph>

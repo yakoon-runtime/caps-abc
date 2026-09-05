@@ -1,0 +1,38 @@
+<heading>edit - Rename a category.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  edit CATEGORY --new-name NAME
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Renames a category. CATEGORY may be an id or a category name.
+The new name must not collide with another category
+(case-insensitive).
+</paragraph>
+
+<heading level="2">
+Examples
+</heading>
+
+<pre>
+edit Geschichte --new-name History
+  Rename the category Geschichte to History.
+</pre>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+add, delete, list, find
+</paragraph>

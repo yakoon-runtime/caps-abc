@@ -1,0 +1,6 @@
+components:
+  y5n-caps-abc:
+    location: .
+bundles:
+  abc:
+    - y5n-caps-abc

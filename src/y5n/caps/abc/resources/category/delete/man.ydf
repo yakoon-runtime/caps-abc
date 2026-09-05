@@ -1,0 +1,38 @@
+<heading>delete - Delete an empty category.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  delete CATEGORY
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Deletes a category. CATEGORY may be an id or a category name.
+Only empty categories can be deleted — a category that still
+contains topics is rejected.
+</paragraph>
+
+<heading level="2">
+Examples
+</heading>
+
+<pre>
+delete Geschichte
+  Delete the category Geschichte.
+</pre>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+add, edit, list, find
+</paragraph>

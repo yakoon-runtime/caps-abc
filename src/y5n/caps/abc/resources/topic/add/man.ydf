@@ -1,0 +1,38 @@
+<heading>add - Create a new topic in a category.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  add NAME --category CATEGORY
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Creates a new topic inside the given category. CATEGORY may be
+an id or a category name. Topic names are unique within their
+category; the same topic name may exist in different categories.
+</paragraph>
+
+<heading level="2">
+Examples
+</heading>
+
+<pre>
+add "Römisches Reich" --category Geschichte
+  Create the topic Römisches Reich in the category Geschichte.
+</pre>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+edit, delete, list, find
+</paragraph>

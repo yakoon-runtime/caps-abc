@@ -1,0 +1,17 @@
+title: Add Category
+host: /boot/python/runtime
+resolvable: true
+navigable: false
+contextual: false
+entry:
+  run: cap:y5n.caps.abc.apps.category.add:main
+invocation:
+  params:
+  - key: name
+    required: true
+    positional: true
+resources:
+  ref: resource:y5n.caps.abc.resources.loader:content
+  man:
+    default:
+      path: category/add/man.ydf

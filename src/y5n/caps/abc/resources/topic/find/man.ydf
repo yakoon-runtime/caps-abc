@@ -1,0 +1,39 @@
+<heading>find - Find topics by name.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  find TEXT
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Finds topics whose name contains TEXT (case-insensitive
+substring match). Results show the topic's category so that
+identical or similar topic names stay understandable. No
+ranking, no fuzzy matching.
+</paragraph>
+
+<heading level="2">
+Examples
+</heading>
+
+<pre>
+find reich
+  Find topics containing 'reich'.
+</pre>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+list, add
+</paragraph>

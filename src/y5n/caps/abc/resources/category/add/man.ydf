@@ -1,0 +1,42 @@
+<heading>add - Create a new category.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  add NAME
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Creates a new category with the given name. Category names are
+unique across ABC.
+</paragraph>
+
+<paragraph>
+A category is the top-level container of the ABC library. It groups
+related topics, for example a school subject or an area of interest.
+</paragraph>
+
+<heading level="2">
+Examples
+</heading>
+
+<pre>
+add Geschichte
+  Create a category called Geschichte.
+</pre>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+edit, delete, list, find
+</paragraph>

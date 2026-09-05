@@ -1,0 +1,38 @@
+<heading>delete - Delete a topic.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  delete TOPIC
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Deletes a topic. TOPIC may be an id or a topic name; if the
+name is ambiguous, the matching topics and their categories
+are shown and an id must be used.
+</paragraph>
+
+<heading level="2">
+Examples
+</heading>
+
+<pre>
+delete "Römisches Reich"
+  Delete the topic Römisches Reich.
+</pre>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+add, edit, list, find
+</paragraph>

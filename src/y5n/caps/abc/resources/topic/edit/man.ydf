@@ -1,0 +1,40 @@
+<heading>edit - Rename a topic.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  edit TOPIC --new-name NAME
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Renames a topic. TOPIC may be an id or a topic name. Topic
+names are only unique within their category — if the name is
+ambiguous, the matching topics and their categories are shown
+and an id must be used. The new name must not collide with
+another topic in the same category (case-insensitive).
+</paragraph>
+
+<heading level="2">
+Examples
+</heading>
+
+<pre>
+edit "Römisches Reich" --new-name "Römische Kaiserzeit"
+  Rename the topic.
+</pre>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+add, delete, list, find
+</paragraph>

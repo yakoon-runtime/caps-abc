@@ -1,0 +1,19 @@
+title: Add Topic
+host: /boot/python/runtime
+resolvable: true
+navigable: false
+contextual: false
+entry:
+  run: cap:y5n.caps.abc.apps.topic.add:main
+invocation:
+  params:
+  - key: name
+    required: true
+    positional: true
+  - key: category
+    required: true
+resources:
+  ref: resource:y5n.caps.abc.resources.loader:content
+  man:
+    default:
+      path: topic/add/man.ydf
