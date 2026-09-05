@@ -1,0 +1,20 @@
+title: Show Run
+host: /boot/python/runtime
+resolvable: true
+navigable: false
+contextual: false
+entry:
+  run: cap:y5n.caps.abc.apps.run.show:main
+invocation:
+  params:
+  - key: topic
+    required: true
+    positional: true
+  - key: run
+    required: true
+    positional: true
+resources:
+  ref: resource:y5n.caps.abc.resources.loader:content
+  man:
+    default:
+      path: run/show/man.ydf

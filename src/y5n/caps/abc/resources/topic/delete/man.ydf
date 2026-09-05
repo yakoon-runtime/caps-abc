@@ -17,7 +17,8 @@ Description
 <paragraph>
 Deletes a topic. TOPIC may be an id or a topic name; if the
 name is ambiguous, the matching topics and their categories
-are shown and an id must be used.
+are shown and an id must be used. A topic that still contains
+runs cannot be deleted.
 </paragraph>
 
 <heading level="2">
@@ -25,8 +26,8 @@ Examples
 </heading>
 
 <pre>
-delete "Römisches Reich"
-  Delete the topic Römisches Reich.
+delete "Roman Empire"
+  Delete the topic Roman Empire.
 </pre>
 
 <heading level="2">

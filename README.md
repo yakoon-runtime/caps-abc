@@ -19,14 +19,19 @@ use AI during an active run.
 
     Category
         └── Topic
+              ├── Run
+              └── Run
 
 - `Category` — a named collection of related topics. Names are globally
   unique, case-insensitively.
 - `Topic` — a subject within a category. Names are unique within their
   category, case-insensitively.
+- `Run` — one completed ABC run of a topic: an immutable historical
+  snapshot with a timestamp and the entries collected during the run,
+  assigned to the letters A–Z.
 
-Only empty containers may be deleted. A category containing topics
-cannot be deleted.
+Only empty containers may be deleted. A category containing topics or a
+topic containing runs cannot be deleted.
 
 ## Commands
 
@@ -47,6 +52,11 @@ ABC is mounted at `/opt/abc`.
             list
             find
 
+        run/
+            new
+            list
+            show
+
 `find` performs a case-insensitive substring search over names.
 
 Topic search results include their category so that similarly named
@@ -60,36 +70,45 @@ Storage is provided through Yakoon's Store abstraction. The concrete
 backend is defined by the installation and is not part of the ABC
 capability.
 
-## Planned
+## ABC Runs
 
-ABC runs will add historical learning snapshots to a topic:
+`run new` starts an interactive run for a topic. The user sees the
+topic and the retrieval keys A–Z and 0–9 as a retrieval cue; keys with
+entries are emphasized. The user enters associations on a single input
+line; several entries can be separated with a semicolon:
 
-    Category
-        └── Topic
-              ├── Run
-              ├── Run
-              └── Run
+    army; emperor; republic; civil rights
 
-The intended interaction is deliberately simple. The user enters
-associations on a single input line; several entries can be separated
-with a semicolon:
-
-    Armee; Kaiser; Republik; Bürgerrecht
-
-An entry is placed under the letter it begins with. A letter prefix
+An entry is placed under the key character it begins with: the first
+character must be an ASCII A–Z letter or a digit. A key prefix
 overrides this:
 
-    Armee                        -> A
-    Kaiser                       -> K
-    a: genügend Abstand halten   -> A
+    army                     -> A
+    emperor                  -> E
+    1945                     -> 1
+    9. November              -> 9
+    4: 1945                  -> 4
+    a: plenty of distance    -> A
 
-Commas remain ordinary content and are not separators.
+Entries that do not begin with a key character (for example umlaut
+words like "Ärzte") are not stored — the run view names them and a key
+prefix assigns them ("a: Ärzte"). Commas remain ordinary content and
+are not separators. Each Enter accepts the input, appends the entries
+to the current run state and re-renders the run view; the submitted
+input itself is cleared and appears only in the accumulated entries.
+Identical entries under the same key are stored once; different casing
+remains distinct.
+
+**Ctrl+N finishes the run.** Finishing stores one immutable run
+snapshot for the topic; an empty run is discarded. Esc pauses the run
+(within the session) and Ctrl+X cancels it without storing anything.
 
 During a run, no previous answers, suggestions, search, autocomplete,
 AI assistance, evaluation, or scores are present. Completed runs are
 historical snapshots and are not edited.
 
-The run commands will be documented here once implemented.
+`run list` shows the runs of a topic with their timestamps and entry
+counts; `run show` displays one run grouped by key.
 
 ## Development
 

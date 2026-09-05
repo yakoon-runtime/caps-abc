@@ -25,8 +25,8 @@ Examples
 </heading>
 
 <pre>
-add "Römisches Reich" --category Geschichte
-  Create the topic Römisches Reich in the category Geschichte.
+add "Roman Empire" --category History
+  Create the topic Roman Empire in the category History.
 </pre>
 
 <heading level="2">

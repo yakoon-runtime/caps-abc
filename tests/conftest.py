@@ -112,3 +112,8 @@ def categories():
 @pytest.fixture
 def topics():
     return _get("abc.topic.service")
+
+
+@pytest.fixture
+def runs():
+    return _get("abc.run.service")

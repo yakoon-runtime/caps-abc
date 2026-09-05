@@ -1,0 +1,66 @@
+<heading>new - Start an interactive ABC run.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  new TOPIC
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Starts an interactive ABC run for the given topic. TOPIC may be an
+id or a topic name. The user sees the retrieval keys A-Z and 0-9
+and enters associations on a single input line; several entries
+can be separated with a semicolon. Comma is ordinary content and
+never splits entries.
+</paragraph>
+
+<paragraph>
+An entry is placed under the key character it begins with: the
+first character must be an ASCII A-Z letter or a digit. A key
+prefix overrides the assignment and is not part of the stored
+text. Entries that do not begin with a key character are not
+stored; the run view names them.
+</paragraph>
+
+<pre>
+  Augustus                -&gt; A
+  1945                    -&gt; 1
+  4: 1945                 -&gt; 4
+  a: plenty of distance   -&gt; A
+</pre>
+
+<paragraph>
+Press Ctrl+N to finish the run. Finishing stores one immutable run
+snapshot; an empty run is discarded. Identical entries under the
+same key are stored once; different casing remains distinct. The
+submitted input is cleared after each Enter and appears only in the
+accumulated entries. During the run no previous answers,
+suggestions, search, autocomplete, AI or evaluation are shown.
+Press Esc to pause the run and Ctrl+X to cancel it without storing
+anything.
+</paragraph>
+
+<heading level="2">
+Examples
+</heading>
+
+<pre>
+new "Roman Empire"
+  Start an ABC run for the topic Roman Empire.
+</pre>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+list, show
+</paragraph>

@@ -9,9 +9,17 @@ def topic_key(topic_id: str) -> Key:
     return Key.from_parts("abc", "topic", "global", topic_id)
 
 
+def run_key(run_id: str) -> Key:
+    return Key.from_parts("abc", "run", "global", run_id)
+
+
 def category_namespace() -> Namespace:
     return Namespace("abc", "category", "global")
 
 
 def topic_namespace() -> Namespace:
     return Namespace("abc", "topic", "global")
+
+
+def run_namespace() -> Namespace:
+    return Namespace("abc", "run", "global")

@@ -7,6 +7,7 @@ from y5n.runtime.store.event.ports import OnDelete, OnGet, OnReplace
 from ..data import TopicData
 from ..models import Topic
 from .namespaces import category_key, topic_key, topic_namespace
+from .run import RunService
 
 
 class OnScan(Protocol):
@@ -16,12 +17,14 @@ class OnScan(Protocol):
 class TopicService:
     def __init__(
         self,
+        runs: RunService,
         on_get: OnGet,
         on_replace: OnReplace,
         on_scan: OnScan,
         on_delete: OnDelete,
         on_next_id,
     ):
+        self._runs = runs
         self._on_get = on_get
         self._on_replace = on_replace
         self._on_scan = on_scan
@@ -81,6 +84,8 @@ class TopicService:
         topic = await self.get_topic(topic_id)
         if topic is None:
             raise ValueError(f"Topic '{topic_id}' not found.")
+        if await self._runs.list_runs(topic_id=topic_id):
+            raise ValueError(f"Topic '{topic.name}' still contains runs.")
         await self._on_delete(key=topic_key(topic_id))
 
     async def _all_topics(self) -> list[Topic]:

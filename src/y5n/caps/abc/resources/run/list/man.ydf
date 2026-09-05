@@ -1,0 +1,38 @@
+<heading>list - List the runs of a topic.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  list TOPIC
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Lists the runs of the given topic in chronological order with
+their ids, timestamps and entry counts. TOPIC may be an id or a
+topic name.
+</paragraph>
+
+<heading level="2">
+Examples
+</heading>
+
+<pre>
+list "Roman Empire"
+  List all runs of the topic.
+</pre>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+new, show
+</paragraph>

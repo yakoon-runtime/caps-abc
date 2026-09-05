@@ -5,8 +5,10 @@ from y5n.sdk import ports, store
 
 from .services import (
     CategoryService,
+    RunService,
     TopicService,
     category_namespace,
+    run_namespace,
     topic_namespace,
 )
 
@@ -17,7 +19,7 @@ async def main():
 
     INDEX_ALL = IndexSpec(key=IndexKey("all"), value_type=ValueType.TEXT, unique=False)
 
-    for ns in [category_namespace(), topic_namespace()]:
+    for ns in [category_namespace(), topic_namespace(), run_namespace()]:
         await db.ensure_indexes(namespace=ns, specs=[INDEX_ALL])
 
     async def _scan(namespace):
@@ -30,7 +32,14 @@ async def main():
         idx = list(indexes) + [IndexTerm(key=IndexKey("all"), value="1")]
         return await db.replace(key=key, doc=doc, indexes=idx)
 
+    runs = RunService(
+        on_get=db.get,
+        on_replace=_replace,
+        on_scan=_scan,
+        on_next_id=db.next_id,
+    )
     topics = TopicService(
+        runs=runs,
         on_get=db.get,
         on_replace=_replace,
         on_scan=_scan,
@@ -46,5 +55,6 @@ async def main():
         on_next_id=db.next_id,
     )
 
+    ports.publish("abc.run.service", runs)
     ports.publish("abc.topic.service", topics)
     ports.publish("abc.category.service", categories)

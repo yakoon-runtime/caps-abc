@@ -27,7 +27,7 @@ Examples
 </heading>
 
 <pre>
-edit "Römisches Reich" --new-name "Römische Kaiserzeit"
+edit "Roman Empire" --new-name "Roman Republic"
   Rename the topic.
 </pre>
 

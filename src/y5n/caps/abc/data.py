@@ -36,3 +36,31 @@ class TopicData:
             name=d["name"],
             _v=d.get("_v", 0),
         )
+
+
+@dataclass
+class RunData:
+    CURRENT_VERSION = 1
+    topic_id: str
+    created: str
+    entries: dict[str, list[str]]
+    _v: int = field(default=CURRENT_VERSION)
+
+    def to_dict(self) -> dict:
+        return {
+            "topic_id": self.topic_id,
+            "created": self.created,
+            "entries": {k: list(v) for k, v in self.entries.items()},
+            "_v": self._v,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> RunData:
+        d = dict(d or {})
+        entries = d.get("entries") or {}
+        return cls(
+            topic_id=d["topic_id"],
+            created=d["created"],
+            entries={k: list(v) for k, v in entries.items()},
+            _v=d.get("_v", 0),
+        )

@@ -25,8 +25,8 @@ Examples
 </heading>
 
 <pre>
-edit Geschichte --new-name History
-  Rename the category Geschichte to History.
+edit History --new-name "Ancient History"
+  Rename the category History to Ancient History.
 </pre>
 
 <heading level="2">

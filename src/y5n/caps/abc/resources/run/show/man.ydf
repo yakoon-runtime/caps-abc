@@ -1,0 +1,38 @@
+<heading>show - Show one stored run.</heading>
+
+<rule/>
+
+<heading level="2">
+Usage
+</heading>
+
+<pre>
+  show TOPIC RUN
+</pre>
+
+<heading level="2">
+Description
+</heading>
+
+<paragraph>
+Shows the entries of one stored run, grouped by letter. TOPIC
+may be an id or a topic name; RUN is the run id as shown by
+'run list'. Runs are immutable snapshots.
+</paragraph>
+
+<heading level="2">
+Examples
+</heading>
+
+<pre>
+show "Roman Empire" 1
+  Show run #1 of the topic.
+</pre>
+
+<heading level="2">
+See also
+</heading>
+
+<paragraph>
+new, list
+</paragraph>
