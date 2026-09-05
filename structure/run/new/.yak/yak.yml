@@ -11,6 +11,7 @@ invocation:
     required: true
     positional: true
   - key: test
+    kind: flag
 resources:
   ref: resource:y5n.caps.abc.resources.loader:content
   man:
