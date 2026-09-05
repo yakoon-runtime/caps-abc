@@ -40,7 +40,7 @@ async def main():
                 Text(
                     text=[
                         InlineText(text=f"{key}: "),
-                        InlineText(text=", ".join(entries)),
+                        InlineText(text="; ".join(entries)),
                     ]
                 )
             )

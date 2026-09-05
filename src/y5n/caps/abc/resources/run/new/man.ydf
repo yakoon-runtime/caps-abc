@@ -39,13 +39,13 @@ stored; the run view names them.
 
 <paragraph>
 Press Ctrl+N to finish the run. Finishing stores one immutable run
-snapshot; an empty run is discarded. Identical entries under the
-same key are stored once; different casing remains distinct. The
-submitted input is cleared after each Enter and appears only in the
-accumulated entries. During the run no previous answers,
-suggestions, search, autocomplete, AI or evaluation are shown.
-Press Esc to pause the run and Ctrl+X to cancel it without storing
-anything.
+snapshot; an empty run is discarded. Entries under the same key
+that differ only in case are stored once; the spelling of the
+first entry is kept. The submitted input is cleared after each
+Enter and appears only in the accumulated entries. During the run
+no previous answers, suggestions, search, autocomplete, AI or
+evaluation are shown. Press Esc to pause the run and Ctrl+X to
+cancel it without storing anything.
 </paragraph>
 
 <heading level="2">

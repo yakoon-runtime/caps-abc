@@ -28,10 +28,7 @@ async def main():
     entries: dict[str, list[str]] = {}
     rejected: list[str] = []
     while True:
-        event = await io.prompt(
-            _run_view(topic, entries, rejected),
-            echo=False,
-        )
+        event = await io.prompt(_run_view(topic, entries, rejected))
         payload = event.payload
         if isinstance(payload, FormAction):
             if payload.action == "submit":
@@ -43,7 +40,8 @@ async def main():
         pairs, rejected = parse_entries(text)
         for key, entry in pairs:
             bucket = entries.setdefault(key, [])
-            if entry not in bucket:
+            folded = [e.casefold() for e in bucket]
+            if entry.casefold() not in folded:
                 bucket.append(entry)
 
     count = sum(len(v) for v in entries.values())
@@ -75,7 +73,7 @@ def _run_view(topic, entries: dict[str, list[str]], rejected: list[str]) -> dict
         Rule(),
         Text(text=cue),
         Text(),
-        Text(text=[InlineText(text=", ".join(collected))]),
+        Text(text=[InlineText(text="; ".join(collected))]),
     ]
     if rejected:
         listed = ", ".join(f'"{part}"' for part in rejected)

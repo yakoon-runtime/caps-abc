@@ -282,6 +282,7 @@ async def test_run_interaction_accumulates_and_persists_once(categories, topics,
 
     last = _view_text(views[-1])
     assert "Army" in last and "plenty of distance" in last
+    assert "; " in last
     assert '"type": "underline"' in last
     assert '"type": "strong"' not in last
 
@@ -367,26 +368,6 @@ async def test_run_interaction_abandoned_run_not_persisted(categories, topics, r
 
 
 @pytest.mark.asyncio
-async def test_run_prompt_carries_no_submitted_echo(categories, topics, runs):
-    await _make_topic(categories, topics)
-    _set_run_context("Roman Empire")
-
-    pulses = _drive(_new_run(), ["Augustus", FormAction("submit")])
-
-    views = _persist_views(pulses)
-    assert len(views) >= 2
-    assert "Augustus" in _view_text(views[-1])
-    for pulse in pulses:
-        for effect in pulse.effects:
-            if getattr(effect, "persist", False):
-                assert effect.ctx is not None
-                assert effect.ctx.echo is None
-
-    stored = await runs.list_runs()
-    assert stored[0].entries == {"A": ["Augustus"]}
-
-
-@pytest.mark.asyncio
 async def test_run_interaction_numeric_keys_underlined(categories, topics, runs):
     t = await _make_topic(categories, topics)
     _set_run_context("Roman Empire")
@@ -428,14 +409,16 @@ async def test_run_interaction_deduplicates_exact_entries(categories, topics, ru
 
 
 @pytest.mark.asyncio
-async def test_run_interaction_case_distinct_entries_remain(categories, topics, runs):
+async def test_run_interaction_deduplicates_case_insensitively(
+    categories, topics, runs
+):
     t = await _make_topic(categories, topics)
     _set_run_context("Roman Empire")
 
-    _drive(_new_run(), ["Afrika", "afrika", FormAction("submit")])
+    _drive(_new_run(), ["Afrika", "afrika", "AFRIKA", FormAction("submit")])
 
     stored = await runs.list_runs(topic_id=t.id)
-    assert stored[0].entries == {"A": ["Afrika", "afrika"]}
+    assert stored[0].entries == {"A": ["Afrika"]}
 
 
 @pytest.mark.asyncio

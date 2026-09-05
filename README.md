@@ -96,8 +96,8 @@ prefix assigns them ("a: Ärzte"). Commas remain ordinary content and
 are not separators. Each Enter accepts the input, appends the entries
 to the current run state and re-renders the run view; the submitted
 input itself is cleared and appears only in the accumulated entries.
-Identical entries under the same key are stored once; different casing
-remains distinct.
+Entries under the same key that differ only in case are stored once
+(comparison ignores case); the spelling of the first entry is kept.
 
 **Ctrl+N finishes the run.** Finishing stores one immutable run
 snapshot for the topic; an empty run is discarded. Esc pauses the run
