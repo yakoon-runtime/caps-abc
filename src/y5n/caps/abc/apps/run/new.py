@@ -11,8 +11,8 @@ from y5n.sdk.models import (
     Text,
 )
 
+from ..topics import resolve_topic
 from .parsing import KEYS, parse_entries
-from .topics import resolve_topic
 
 
 async def main():
@@ -20,10 +20,11 @@ async def main():
     topic_ref = request.arg(0)
     test_mode = request.has_option("test")
 
+    categories = ports.get("abc.category.service")
     topics = ports.get("abc.topic.service")
     runs = ports.get("abc.run.service")
 
-    topic = await resolve_topic(topics, topic_ref)
+    topic = await resolve_topic(topics, categories, topic_ref)
     if topic is None:
         return
 
@@ -119,9 +120,7 @@ def _run_view(
             Text(
                 text=[
                     InlineEm(
-                        children=[
-                            InlineText(text="Test run — nothing will be stored.")
-                        ]
+                        children=[InlineText(text="Test run — nothing will be stored.")]
                     )
                 ]
             )

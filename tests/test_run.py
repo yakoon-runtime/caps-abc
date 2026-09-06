@@ -377,6 +377,23 @@ async def test_run_new_missing_topic_error(categories, topics, runs):
 
 
 @pytest.mark.asyncio
+async def test_run_new_ambiguous_topic_lists_candidates(categories, topics, runs):
+    c1 = await categories.add_category(name="Geschichte")
+    c2 = await categories.add_category(name="Führung")
+    t1 = await topics.add_topic(category_id=c1.id, name="Change")
+    t2 = await topics.add_topic(category_id=c2.id, name="Change")
+    _set_run_context("Change")
+
+    pulses = _drive(_new_run(), [])
+
+    text = _view_text(_all_views(pulses)[-1])
+    assert "ambiguous" in text
+    assert f"#{t1.id} Change — Geschichte" in text
+    assert f"#{t2.id} Change — Führung" in text
+    assert await runs.list_runs() == []
+
+
+@pytest.mark.asyncio
 async def test_run_interaction_empty_input_is_ignored(categories, topics, runs):
     t = await _make_topic(categories, topics)
     _set_run_context("Roman Empire")

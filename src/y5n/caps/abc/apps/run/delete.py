@@ -1,16 +1,17 @@
 from y5n.sdk import context, io, ports
 
-from .topics import resolve_topic
+from ..topics import resolve_topic
 
 
 async def main():
     topic_ref = context.request().arg(0)
     run_ref = context.request().arg(1)
 
+    categories = ports.get("abc.category.service")
     topics = ports.get("abc.topic.service")
     runs = ports.get("abc.run.service")
 
-    topic = await resolve_topic(topics, topic_ref)
+    topic = await resolve_topic(topics, categories, topic_ref)
     if topic is None:
         return
 
